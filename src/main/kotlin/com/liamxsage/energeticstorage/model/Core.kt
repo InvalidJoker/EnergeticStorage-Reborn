@@ -70,17 +70,20 @@ class Core(
 
 
 
-    fun storeItem(item: ItemStack) {
+    fun storeItem(item: ItemStack): Boolean {
         // get the container with the least amount of items
-        val container = connectedContainers.minByOrNull { it.getBlocks().sumOf { it.amount } } ?: return
+        if (connectedContainers.isEmpty()) return false
+        val container = connectedContainers.minByOrNull { it.getBlocks().sumOf { it.amount } } ?: return false
 
         // add the item to the container
 
-        val inventory = container.getInventory() ?: return run {
+        val inventory = container.getInventory() ?: run {
             removeItem(container)
-            storeItem(item)
+            return storeItem(item)
         }
         inventory.addItem(item)
+
+        return true
     }
 
     fun removeItem(item: ItemStack) {

@@ -7,6 +7,7 @@ import com.liamxsage.energeticstorage.customblockdata.BlockDataListener
 import com.liamxsage.energeticstorage.extensions.getLogger
 import com.liamxsage.energeticstorage.listeners.BlockBreakListener
 import com.liamxsage.energeticstorage.listeners.BlockPlaceListener
+import com.liamxsage.energeticstorage.listeners.HopperEvent
 import com.liamxsage.energeticstorage.listeners.ItemClickListener
 import dev.fruxz.ascend.extension.forceCastOrNull
 import org.bukkit.Bukkit
@@ -86,6 +87,7 @@ object RegisterManager {
             BlockBreakListener(),
             BlockPlaceListener(),
             BlockDataListener(),
+            HopperEvent()
         )
         var amountListeners = 0
         for (listener in listenerClasses) {

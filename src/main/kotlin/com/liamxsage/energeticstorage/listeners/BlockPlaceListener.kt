@@ -91,7 +91,7 @@ class BlockPlaceListener : Listener {
         // hopper needs to be on top of a container or cable
 
         val blockBelow = block.getRelative(0, -1, 0)
-        if (blockBelow.type != NetworkInterfaceType.CABLE.material && blockBelow.type != NetworkInterfaceType.CONTAINER.material) {
+        if (!blockBelow.isNetworkInterface) {
             player.sendMessage("You must place this item on top of a cable or container.")
             isCancelled = true
             return
