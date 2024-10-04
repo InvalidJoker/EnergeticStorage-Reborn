@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 
 class ItemClickListener : Listener {
@@ -67,5 +68,10 @@ class ItemClickListener : Listener {
             asAmount(2)
         }.build())
 
+    }
+
+    @EventHandler
+    fun playerLeave(event: PlayerQuitEvent) {
+        SystemCache.save()
     }
 }

@@ -1,5 +1,8 @@
 package com.liamxsage.energeticstorage.cache
 
+import com.liamxsage.energeticstorage.database.loadFromDatabase
+import com.liamxsage.energeticstorage.database.save
+import com.liamxsage.energeticstorage.database.saveToDatabase
 import com.liamxsage.energeticstorage.model.Core
 import com.liamxsage.energeticstorage.model.NetworkItem
 import org.bukkit.block.Block
@@ -51,5 +54,19 @@ object SystemCache {
         val core = cache.values.find { it.block == block }
         cacheLock.readLock().unlock()
         return core
+    }
+
+    fun save() {
+        cacheLock.readLock().lock()
+
+        saveToDatabase()
+
+        cacheLock.readLock().unlock()
+    }
+
+    fun load() {
+        cacheLock.writeLock().lock()
+        loadFromDatabase()
+        cacheLock.writeLock().unlock()
     }
 }

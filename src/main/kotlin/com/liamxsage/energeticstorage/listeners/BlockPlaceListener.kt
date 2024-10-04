@@ -43,7 +43,7 @@ class BlockPlaceListener : Listener {
             block.getRelative(0, -1, 0),
             block.getRelative(0, 0, 1),
             block.getRelative(0, 0, -1)
-        ).filter { it.type == NetworkInterfaceType.CABLE.material || it.type == NetworkInterfaceType.CORE.material || it.type == NetworkInterfaceType.CONTAINER.material }
+        ).filter { it.isNetworkInterface && (it.type == NetworkInterfaceType.CABLE.material || it.type == NetworkInterfaceType.CORE.material || it.type == NetworkInterfaceType.CONTAINER.material) }
 
         if (nearbyBlocks.none()) {
             player.sendMessage("You must place this item next to a cable, core, or container.")
