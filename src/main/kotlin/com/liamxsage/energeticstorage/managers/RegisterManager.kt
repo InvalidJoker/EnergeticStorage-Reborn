@@ -3,24 +3,14 @@ package com.liamxsage.energeticstorage.managers
 import com.google.common.reflect.ClassPath
 import com.liamxsage.energeticstorage.EnergeticStorage
 import com.liamxsage.energeticstorage.PACKAGE_NAME
-import com.liamxsage.energeticstorage.annotations.RegisterCommand
 import com.liamxsage.energeticstorage.customblockdata.BlockDataListener
 import com.liamxsage.energeticstorage.extensions.getLogger
-import com.liamxsage.energeticstorage.extensions.sendMessagePrefixed
-import com.liamxsage.energeticstorage.gui.DiskDriveGui
-import com.liamxsage.energeticstorage.gui.TerminalGui
 import com.liamxsage.energeticstorage.listeners.BlockBreakListener
 import com.liamxsage.energeticstorage.listeners.BlockPlaceListener
 import com.liamxsage.energeticstorage.listeners.ItemClickListener
-import com.liamxsage.energeticstorage.listeners.PlayerInteractListener
 import dev.fruxz.ascend.extension.forceCastOrNull
 import org.bukkit.Bukkit
-import org.bukkit.command.CommandExecutor
-import org.bukkit.command.PluginCommand
-import org.bukkit.permissions.Permission
-import org.bukkit.plugin.Plugin
 import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
 
 object RegisterManager {
 
@@ -86,48 +76,6 @@ object RegisterManager {
         }
     }
 
-    fun registerCommands() {
-        val commandClasses = loadClassesInPackageWithAnnotation(PACKAGE_NAME, RegisterCommand::class)
-
-        commandClasses.forEach {
-            val annotation: RegisterCommand = it.annotations.first { it is RegisterCommand } as RegisterCommand
-
-            val pluginClass: Class<PluginCommand> = PluginCommand::class.java
-
-            val constructor = pluginClass.getDeclaredConstructor(String::class.java, Plugin::class.java)
-
-            constructor.isAccessible = true
-
-            val command: PluginCommand = constructor.newInstance(annotation.name, EnergeticStorage.instance)
-
-
-            command.aliases = annotation.aliases.toList()
-            command.description = annotation.description
-            if (annotation.permission.isEmpty()) {
-                command.permission = null
-            } else {
-                command.permission = Permission(annotation.permission, annotation.permissionDefault).name
-            }
-            command.usage = annotation.usage
-            val commandInstance = it.primaryConstructor?.call() as CommandExecutor
-            command.setExecutor { sender, command, label, args ->
-                try {
-                    commandInstance.onCommand(sender, command, label, args)
-                } catch (e: Exception) {
-                    sender.sendMessagePrefixed("An error occurred while executing the command.")
-                    throw e
-                }
-            }
-            command.tabCompleter = commandInstance as? org.bukkit.command.TabCompleter
-
-
-            Bukkit.getCommandMap().register(EnergeticStorage.instance.name.lowercase(), command)
-            Bukkit.getConsoleSender().sendMessage("Command ${command.name} registered")
-        }
-
-        logger.info("Registered ${commandClasses.size} minecraft commands")
-    }
-
     /**
      * Registers listeners by iterating through a list of listener classes and registering them
      * with the Bukkit plugin manager.
@@ -137,10 +85,7 @@ object RegisterManager {
             ItemClickListener(),
             BlockBreakListener(),
             BlockPlaceListener(),
-            PlayerInteractListener(),
             BlockDataListener(),
-            DiskDriveGui(),
-            TerminalGui()
         )
         var amountListeners = 0
         for (listener in listenerClasses) {

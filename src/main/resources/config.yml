@@ -1,22 +1,3 @@
-drives:
-  # Sets the drives max type limit.
-  SMALL:
-    diskName: "1k Disk"
-    items: 1024
-    types: 64
-  MEDIUM:
-    diskName: "4k Disk"
-    items: 4096
-    types: 128
-  LARGE:
-    diskName: "16k Disk"
-    items: 16384
-    types: 256
-  XLARGE:
-    diskName: "64k Disk"
-    items: 65536
-    types: 512
-
 networks:
   maxLength: 128 # The maximum length of the network (connected blocks)
 

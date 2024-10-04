@@ -3,9 +3,9 @@ package com.liamxsage.energeticstorage
 import com.google.gson.GsonBuilder
 import com.liamxsage.energeticstorage.database.DatabaseConnection
 import com.liamxsage.energeticstorage.managers.RegisterManager
-import com.liamxsage.energeticstorage.model.ESItem
 import com.liamxsage.energeticstorage.serialization.*
 import org.bukkit.Location
+import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
@@ -29,11 +29,11 @@ class EnergeticStorage : JavaPlugin() {
      * @see ItemStackAdapter
      */
     val gson = GsonBuilder()
-        .registerTypeAdapter(ESItem::class.java, ESItemAdapter())
         .registerTypeAdapter(ItemStack::class.java, ItemStackAdapter())
         .registerTypeAdapter(UUID::class.java, UUIDAdapter())
         .registerTypeAdapter(Location::class.java, LocationAdapter())
         .registerTypeAdapter(Optional::class.java, OptionalTypeAdapter())
+        .registerTypeAdapter(Block::class.java, BlockAdapter())
         .create()
 
     init {
@@ -50,7 +50,6 @@ class EnergeticStorage : JavaPlugin() {
         DatabaseConnection.connect()
 
         val time = measureTimeMillis {
-            RegisterManager.registerCommands()
             RegisterManager.registerListeners()
         }
         logger.info("Plugin enabled in $time ms")

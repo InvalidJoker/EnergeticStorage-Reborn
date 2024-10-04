@@ -12,38 +12,31 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import java.util.*
 
-
-class Core(
-    val uuid: UUID = UUID.randomUUID(),
+class Container(
     override val block: Block
 ): NetworkItem(block) {
-    override var connectedCoreUUID: UUID? = uuid
+    override var connectedCoreUUID: UUID? = null
 
-    val connectedItems = mutableSetOf<NetworkItem>()
-
-    val connectedContainers
-        get() = connectedItems.filterIsInstance<Container>()
-
-    val connectedCables
-        get() = connectedItems.filterIsInstance<Cable>()
-
-    init {
-        SystemCache.addSystem(this)
-    }
-
-    override fun setBlockUUID(): Core {
+    override fun setBlockUUID(): Container {
         block.persistentDataContainer[NETWORK_INTERFACE_ID_NAMESPACE, PersistentDataType.STRING] = connectedCoreUUID.toString()
         return this
     }
 
-    companion object {
+    fun getInventory(): List<ItemStack> {
+        // Ensure the block is an instance of a container (e.g., Chest, Barrel)
+        val state = block.state
+        if (state is org.bukkit.block.Container) {
+            return state.inventory.contents.filterNotNull()
+        } else {
+            throw IllegalStateException("The block is not a valid container with an inventory.")
+        }
+    }
 
-        fun createCoreItem(): ItemStack = NetworkInterfaceType.CORE.material.toItemBuilder {
-            display("${TEXT_GRAY}Core")
+    companion object {
+        fun createContainerItem(): ItemStack = NetworkInterfaceType.CONTAINER.material.toItemBuilder {
+            display("${TEXT_GRAY}Storage Container")
             lore(
-                "${TEXT_GRAY}Heart of the system",
-                "${TEXT_GRAY}Needs to be inserted into a system to function.",
-                "${TEXT_GRAY}Maximum of 1 per system."
+                "${TEXT_GRAY}Store your items",
             )
             setGlinting(true)
             customModelData(1)
@@ -51,19 +44,5 @@ class Core(
             flag(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ENCHANTS)
         }.build()
     }
-
-    val totalItems: Long
-        get() = connectedContainers.sumOf { it.getInventory().sumOf { it.amount.toLong() } }
-
-    fun addItem(item: NetworkItem) {
-        connectedItems.add(item)
-    }
-
-
-
-    fun removeItem(block: Block) {
-        connectedItems.removeIf { it.block.location == block.location }
-    }
-
 
 }
