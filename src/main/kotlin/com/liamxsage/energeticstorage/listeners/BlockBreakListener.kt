@@ -12,8 +12,9 @@ class BlockBreakListener : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onBlockBreak(event: BlockBreakEvent): Unit = with(event) {
-        if (!block.isNetworkInterface) return@with
         isDropItems = false
+
+        println("Block broken: ${block.type}")
 
         if (block.type == NetworkInterfaceType.CORE.material) {
 
@@ -23,28 +24,24 @@ class BlockBreakListener : Listener {
             system.connectedItems.forEach { item ->
                 item.connectedCoreUUID = null
             }
-        }
-
-        if (block.type == NetworkInterfaceType.CABLE.material || block.type == NetworkInterfaceType.CONTAINER.material) {
-            val system = SystemCache.getSystemByBlock(block) ?: return
+        } else if (block.type == NetworkInterfaceType.CABLE.material || block.type == NetworkInterfaceType.CONTAINER.material || block.type == NetworkInterfaceType.HOPPER_IMPORT.material) {
+            println("Block broken: $block")
+            val system = SystemCache.getSystemByItemBlock(block) ?: return
 
             system.removeItem(block)
+
+            println("System: $system")
 
             if (system.connectedCables.isEmpty()) {
                 SystemCache.removeSystem(system)
             }
 
-            val connectedItems = getConnectedSystemItems(block)
+            val connectedItems = getConnectedSystemItems(system.block)
 
 
             // compare system.connectedItems to connectedItems and remove any that aren't connected to another core
 
-            system.connectedItems.forEach { item ->
-                if (connectedItems.none { it.value.block.location == item.block.location }) {
-                    system.removeItem(item.block)
-                    item.connectedCoreUUID = null
-                }
-            }
+            println("Connected items: $connectedItems")
 
 
         }

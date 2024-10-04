@@ -9,8 +9,6 @@ import com.liamxsage.energeticstorage.model.NetworkItem
 import dev.fruxz.ascend.extension.forceCastOrNull
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
-import org.bukkit.inventory.ItemStack
-import java.util.*
 
 private fun getFacesExcluding(face: BlockFace): List<BlockFace> {
     return BlockFace.entries.filter { it != face }

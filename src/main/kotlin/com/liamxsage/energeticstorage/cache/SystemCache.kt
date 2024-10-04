@@ -1,10 +1,7 @@
 package com.liamxsage.energeticstorage.cache
 
-import com.liamxsage.energeticstorage.model.Cable
-import com.liamxsage.energeticstorage.model.Container
 import com.liamxsage.energeticstorage.model.Core
 import com.liamxsage.energeticstorage.model.NetworkItem
-import org.bukkit.Location
 import org.bukkit.block.Block
 import java.util.*
 import java.util.concurrent.locks.ReadWriteLock
@@ -27,13 +24,6 @@ object SystemCache {
         cacheLock.writeLock().unlock()
     }
 
-    fun getSystem(uuid: UUID): Core? {
-        cacheLock.readLock().lock()
-        val core = cache[uuid]
-        cacheLock.readLock().unlock()
-        return core
-    }
-
     fun getSystems(): List<Core> {
         cacheLock.readLock().lock()
         val cores = cache.values.toList()
@@ -41,13 +31,6 @@ object SystemCache {
         return cores
     }
 
-
-    fun getSystemByItem(item: NetworkItem): Core? {
-        cacheLock.readLock().lock()
-        val core = cache.values.find { it.connectedItems.contains(item) }
-        cacheLock.readLock().unlock()
-        return core
-    }
 
     fun getItemByBlock(block: Block): NetworkItem? {
         cacheLock.readLock().lock()
@@ -69,7 +52,4 @@ object SystemCache {
         cacheLock.readLock().unlock()
         return core
     }
-
-
-
 }

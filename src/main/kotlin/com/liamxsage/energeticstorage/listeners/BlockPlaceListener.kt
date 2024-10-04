@@ -5,10 +5,7 @@ import com.liamxsage.energeticstorage.cache.SystemCache.getSystemByBlock
 import com.liamxsage.energeticstorage.cache.SystemCache.getSystemByItemBlock
 import com.liamxsage.energeticstorage.extensions.*
 import com.liamxsage.energeticstorage.managers.getConnectedSystemItems
-import com.liamxsage.energeticstorage.model.Cable
-import com.liamxsage.energeticstorage.model.Container
-import com.liamxsage.energeticstorage.model.Core
-import com.liamxsage.energeticstorage.model.NetworkInterfaceType
+import com.liamxsage.energeticstorage.model.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
@@ -25,6 +22,7 @@ class BlockPlaceListener : Listener {
             NetworkInterfaceType.CABLE -> placeItem()
             NetworkInterfaceType.CORE -> placeCore()
             NetworkInterfaceType.CONTAINER -> placeItem()
+            NetworkInterfaceType.HOPPER_IMPORT -> placeHopper()
         }
 
     }
@@ -81,9 +79,55 @@ class BlockPlaceListener : Listener {
         player.soundExecution()
     }
 
+
+    private fun BlockPlaceEvent.placeHopper() {
+        val block = blockPlaced
+        val player = player
+
+        // hopper needs to be on top of a container or cable
+
+        val blockBelow = block.getRelative(0, -1, 0)
+        if (blockBelow.type != NetworkInterfaceType.CABLE.material && blockBelow.type != NetworkInterfaceType.CONTAINER.material) {
+            player.sendMessage("You must place this item on top of a cable or container.")
+            isCancelled = true
+            return
+        }
+
+        val system = getSystemByItemBlock(blockBelow) ?: return
+
+        val networkItem = HopperImporter(block)
+
+        player.sendMessage("Connected to a ${block.type}")
+
+        networkItem.connectedCoreUUID = system.uuid
+        networkItem.setBlockUUID()
+
+        system.addItem(networkItem)
+
+        player.sendMessage("Successfully placed the ${block.type}.")
+        player.soundExecution()
+    }
+
     private fun BlockPlaceEvent.placeCore() {
         val block = blockPlaced
         val player = player
+
+
+        val nearbyBlocks = sequenceOf(
+            block.getRelative(1, 0, 0),
+            block.getRelative(-1, 0, 0),
+            block.getRelative(0, 1, 0),
+            block.getRelative(0, -1, 0),
+            block.getRelative(0, 0, 1),
+            block.getRelative(0, 0, -1)
+        ).filter { it.type == NetworkInterfaceType.CABLE.material || it.type == NetworkInterfaceType.CORE.material || it.type == NetworkInterfaceType.CONTAINER.material }
+
+        // check if next to another system
+        if (!nearbyBlocks.none()) {
+            player.sendMessage("You can only place a core if there are no other systems nearby.")
+            isCancelled = true
+            return
+        }
 
         val core = Core( block = block )
 

@@ -5,6 +5,7 @@ import com.liamxsage.energeticstorage.extensions.toItemBuilder
 import com.liamxsage.energeticstorage.model.Cable
 import com.liamxsage.energeticstorage.model.Container
 import com.liamxsage.energeticstorage.model.Core
+import com.liamxsage.energeticstorage.model.HopperImporter
 import org.bukkit.block.Chest
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -29,8 +30,6 @@ class ItemClickListener : Listener {
 
     @EventHandler
     fun onBlockInteract(event: InventoryOpenEvent) {
-
-
         val player = event.player
 
         player.sendMessage(SystemCache.getSystems().size.toString())
@@ -58,10 +57,13 @@ class ItemClickListener : Listener {
         val core = Core.createCoreItem()
 
         val storage = Container.createContainerItem()
+        val hopper = HopperImporter.createHopperImportItem()
 
         event.player.inventory.addItem(cable.toItemBuilder {
             asAmount(12)
         }.build(), core, storage.toItemBuilder {
+            asAmount(2)
+        }.build(), hopper.toItemBuilder {
             asAmount(2)
         }.build())
 

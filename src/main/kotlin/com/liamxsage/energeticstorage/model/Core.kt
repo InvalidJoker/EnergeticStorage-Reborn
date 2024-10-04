@@ -53,16 +53,47 @@ class Core(
     }
 
     val totalItems: Long
-        get() = connectedContainers.sumOf { it.getInventory().sumOf { it.amount.toLong() } }
+        get() = connectedContainers.sumOf { it.getBlocks().sumOf { it.amount.toLong() } }
 
     fun addItem(item: NetworkItem) {
         connectedItems.add(item)
     }
 
 
-
     fun removeItem(block: Block) {
         connectedItems.removeIf { it.block.location == block.location }
+    }
+
+    fun removeItem(item: NetworkItem) {
+        connectedItems.remove(item)
+    }
+
+
+
+    fun storeItem(item: ItemStack) {
+        // get the container with the least amount of items
+        val container = connectedContainers.minByOrNull { it.getBlocks().sumOf { it.amount } } ?: return
+
+        // add the item to the container
+
+        val inventory = container.getInventory() ?: return run {
+            removeItem(container)
+            storeItem(item)
+        }
+        inventory.addItem(item)
+    }
+
+    fun removeItem(item: ItemStack) {
+        // get the container with this item
+
+        val container = connectedContainers.firstOrNull { it.getBlocks().any { it.isSimilar(item) } } ?: return
+
+        // remove the item from the container
+        val inventory = container.getInventory() ?: return run {
+            removeItem(container)
+           removeItem(item)
+        }
+        inventory.removeItem(item)
     }
 
 
