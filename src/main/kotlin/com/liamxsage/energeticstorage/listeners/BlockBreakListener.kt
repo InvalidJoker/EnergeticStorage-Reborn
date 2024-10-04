@@ -1,11 +1,11 @@
 package com.liamxsage.energeticstorage.listeners
 
-import com.liamxsage.energeticstorage.cache.SystemCache
+import com.liamxsage.energeticstorage.data.cache.SystemCache
 import com.liamxsage.energeticstorage.extensions.isNetworkInterface
-import com.liamxsage.energeticstorage.managers.getConnectedSystemItems
-import com.liamxsage.energeticstorage.model.Container
-import com.liamxsage.energeticstorage.model.NetworkInterfaceType
-import com.liamxsage.energeticstorage.model.NetworkItem
+import com.liamxsage.energeticstorage.utils.getConnectedSystemItems
+import com.liamxsage.energeticstorage.data.Container
+import com.liamxsage.energeticstorage.data.enums.NetworkInterfaceType
+import com.liamxsage.energeticstorage.data.interfaces.NetworkItem
 
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

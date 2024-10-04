@@ -1,7 +1,7 @@
 package com.liamxsage.energeticstorage.extensions
 
 import com.liamxsage.energeticstorage.NETWORK_INTERFACE_NAMESPACE
-import com.liamxsage.energeticstorage.items.ItemBuilder
+import com.liamxsage.energeticstorage.utils.items.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack

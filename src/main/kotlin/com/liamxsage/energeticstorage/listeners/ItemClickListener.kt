@@ -1,11 +1,11 @@
 package com.liamxsage.energeticstorage.listeners
 
-import com.liamxsage.energeticstorage.cache.SystemCache
+import com.liamxsage.energeticstorage.data.cache.SystemCache
 import com.liamxsage.energeticstorage.extensions.toItemBuilder
-import com.liamxsage.energeticstorage.model.Cable
-import com.liamxsage.energeticstorage.model.Container
-import com.liamxsage.energeticstorage.model.Core
-import com.liamxsage.energeticstorage.model.HopperImporter
+import com.liamxsage.energeticstorage.data.Cable
+import com.liamxsage.energeticstorage.data.Container
+import com.liamxsage.energeticstorage.data.Core
+import com.liamxsage.energeticstorage.data.HopperImporter
 import org.bukkit.block.Chest
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

@@ -1,6 +1,6 @@
 package com.liamxsage.energeticstorage.listeners
 
-import com.liamxsage.energeticstorage.cache.SystemCache
+import com.liamxsage.energeticstorage.data.cache.SystemCache
 import com.liamxsage.energeticstorage.extensions.isNetworkInterface
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority

@@ -1,12 +1,13 @@
 package com.liamxsage.energeticstorage.listeners
 
 import com.liamxsage.energeticstorage.NETWORK_INTERFACE_NAMESPACE
-import com.liamxsage.energeticstorage.cache.SystemCache
-import com.liamxsage.energeticstorage.cache.SystemCache.getSystemByBlock
-import com.liamxsage.energeticstorage.cache.SystemCache.getSystemByItemBlock
+import com.liamxsage.energeticstorage.data.cache.SystemCache
+import com.liamxsage.energeticstorage.data.cache.SystemCache.getSystemByBlock
+import com.liamxsage.energeticstorage.data.cache.SystemCache.getSystemByItemBlock
 import com.liamxsage.energeticstorage.extensions.*
-import com.liamxsage.energeticstorage.managers.getConnectedSystemItems
-import com.liamxsage.energeticstorage.model.*
+import com.liamxsage.energeticstorage.utils.getConnectedSystemItems
+import com.liamxsage.energeticstorage.data.*
+import com.liamxsage.energeticstorage.data.enums.NetworkInterfaceType
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent

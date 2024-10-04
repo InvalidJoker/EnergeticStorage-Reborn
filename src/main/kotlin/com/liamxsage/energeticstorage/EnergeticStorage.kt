@@ -1,8 +1,7 @@
 package com.liamxsage.energeticstorage
 
-import com.liamxsage.energeticstorage.cache.SystemCache
-import com.liamxsage.energeticstorage.database.DatabaseConnection
-import com.liamxsage.energeticstorage.managers.RegisterManager
+import com.liamxsage.energeticstorage.data.cache.SystemCache
+import com.liamxsage.energeticstorage.data.database.DatabaseConnection
 import org.bukkit.plugin.java.JavaPlugin
 import kotlin.system.measureTimeMillis
 
@@ -22,10 +21,6 @@ class EnergeticStorage : JavaPlugin() {
     override fun onEnable() {
         // Plugin startup logic
         saveDefaultConfig()
-
-        MAX_NETWORK_LENGTH = config.getInt("networks.maxLength", 128)
-        logger.info("Max network length set to $MAX_NETWORK_LENGTH")
-
         DatabaseConnection.connect()
 
         SystemCache.load()
