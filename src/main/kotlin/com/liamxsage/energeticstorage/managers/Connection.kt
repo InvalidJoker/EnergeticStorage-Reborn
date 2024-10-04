@@ -1,12 +1,9 @@
 package com.liamxsage.energeticstorage.managers
 
-import com.liamxsage.energeticstorage.NETWORK_INTERFACE_ID_NAMESPACE
 import com.liamxsage.energeticstorage.cache.SystemCache
-import com.liamxsage.energeticstorage.extensions.getKey
 import com.liamxsage.energeticstorage.extensions.isNetworkInterface
 import com.liamxsage.energeticstorage.model.NetworkInterfaceType
 import com.liamxsage.energeticstorage.model.NetworkItem
-import dev.fruxz.ascend.extension.forceCastOrNull
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 

@@ -1,5 +1,6 @@
 package com.liamxsage.energeticstorage.listeners
 
+import com.liamxsage.energeticstorage.NETWORK_INTERFACE_NAMESPACE
 import com.liamxsage.energeticstorage.cache.SystemCache
 import com.liamxsage.energeticstorage.cache.SystemCache.getSystemByBlock
 import com.liamxsage.energeticstorage.cache.SystemCache.getSystemByItemBlock
@@ -10,6 +11,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 
 class BlockPlaceListener : Listener {
 
@@ -17,6 +19,8 @@ class BlockPlaceListener : Listener {
     fun onBlockPlace(event: BlockPlaceEvent): Unit = with(event) {
         if (!itemInHand.isNetworkInterface) return@with
         val networkInterfaceType = getNetworkInterfaceType(itemInHand) ?: return@with
+
+        block.persistentDataContainer[NETWORK_INTERFACE_NAMESPACE, PersistentDataType.BOOLEAN] = true
 
         when (networkInterfaceType) {
             NetworkInterfaceType.CABLE -> placeItem()
