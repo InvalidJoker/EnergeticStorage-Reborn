@@ -18,5 +18,3 @@ val NETWORK_INTERFACE_ID_NAMESPACE = NamespacedKey(EnergeticStorage.instance, "n
 
 
 val PLAYER_DEBUG_MODE_NAMESPACE = NamespacedKey(EnergeticStorage.instance, "debug_mode")
-
-var MAX_NETWORK_LENGTH = 512
